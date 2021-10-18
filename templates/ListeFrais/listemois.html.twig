@@ -1,0 +1,30 @@
+{# templates/ListeFrais/listemois.html.twig #}
+{% extends "accueil.html.twig" %}
+{% block body %}
+    {% block bloc1 %}
+        <div id="contenu">
+            <h2>Mes Fiches de Frais</h2>
+            <h3>Mois à sélectionner :</h3>
+            <form method="post">
+                <div class="corpsForm">
+                    <p>
+                        {% if lesmois != null %}
+
+                            <label for="lstMois" accesskey="n">Mois : </label>
+                            <select id="lstMois" name="lstMois">
+                                {% for unMois in lesmois %}
+                                    {% set mois = unMois.mois %}
+
+
+                                    <option selected value="{{ mois }}">{{ unMois.numMois ~"/"}}{{ unMois.numAnnee }}</option>
+                                {% endfor %}
+                            </select>
+                        {% else %}
+                        <h1> {{ 'Aucune fiche saisie pour ce visiteur' }} </h1>
+                        {% endif %} 
+                    </p>
+                </div>
+            </form>
+        </div>
+    {% endblock %}
+{% endblock %}

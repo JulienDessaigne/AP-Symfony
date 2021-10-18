@@ -1,0 +1,27 @@
+{# templates/accueil.html.twig #}
+{% extends "layout.html.twig" %}
+{% block menu %}
+    <div id="menuGauche">
+        <div id="infosUtil">
+            <h3>
+                {% if (app.session.get('nom') is defined ) %}
+                    Visiteur: bonjour {{app.session.get('nom') }} ({{app.session.get('id') }})<br>
+                {% endif %}
+            </h3>
+            <ul id="menuList">
+                <li class="smenu">
+                    <a href="#" title="Saisie fiche de frais ">Saisie fiche de frais</a>
+                </li>
+                <li class="smenu">
+                    <a href="{{path('app_frais_listefrais')}}" title="Consultation de mes fiches de frais">Mes fiches de frais</a>
+                </li>
+                <li class="smenu">
+                    <a href="#" title="valider les frais">Valider les frais</a>
+                </li>
+                <li class="smenu">
+                    <a href="{{path('app_frais_deconnexion')}}" title="Se déconnecter">Déconnexion</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

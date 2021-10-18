@@ -1,7 +1,15 @@
 app_frais_home:
-    path: /accueil
+    path: /
     controller: App\Controller\HomeController::index
     
 app_frais_validerconnexion:
     path: /validerconnexion
     controller: App\Controller\HomeController::validerConnexion
+    
+app_frais_deconnexion:
+    path: /accueil
+    controller: App\Controller\HomeController::deconnexion
+    
+app_frais_listefrais:
+    path: /listefrais
+    controller: App\Controller\ListeFraisController::index
