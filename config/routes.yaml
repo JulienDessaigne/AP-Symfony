@@ -1,11 +1,7 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
-# the "app_lucky_number" route name is not important yet
-app_lucky_number:
-    path: /lucky/number
-    controller: App\Controller\LuckyController::number
+app_frais_home:
+    path: /accueil
+    controller: App\Controller\HomeController::index
     
-app_hello_world:
-    path: /hello/{name}
-    controller: App\Controller\HelloController::word
+app_frais_validerconnexion:
+    path: /validerconnexion
+    controller: App\Controller\HomeController::validerConnexion
