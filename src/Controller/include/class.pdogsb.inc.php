@@ -59,13 +59,13 @@ class PdoGsb {
      * @param $mdp
      * @return l'id, le nom et le prénom sous la forme d'un tableau associatif 
      */
-    public function getInfosVisiteur($login, $mdp) {
-        $req = "select id as id, nom as nom, prenom as prenom ";
-        $req .= " from " . PdoGsb::$prefixe . "Visiteur  where login='$login' and mdp='$mdp'";
-        $rs = PdoGsb::$monPdo->query($req);
-        $ligne = $rs->fetch();
-        return $ligne;
-    }
+//    public function getInfosVisiteur($login, $mdp) {
+//        $req = "select id as id, nom as nom, prenom as prenom ";
+//        $req .= " from " . PdoGsb::$prefixe . "Visiteur  where login='$login' and mdp='$mdp'";
+//        $rs = PdoGsb::$monPdo->query($req);
+//        $ligne = $rs->fetch();
+//        return $ligne;
+//    }
 
     /**
      * Retourne sous forme d'un tableau associatif toutes les lignes de frais hors forfait
@@ -78,19 +78,19 @@ class PdoGsb {
      * @param $mois sous la forme aaaamm
      * @return tous les champs des lignes de frais hors forfait sous la forme d'un tableau associatif 
      */
-    public function getLesFraisHorsForfait($idVisiteur, $mois) {
-        $req = "select id, idVisiteur, mois, libelle, datehf as date,montant  ";
-        $req .= " from " . PdoGsb::$prefixe . "LigneFraisHorsForfait where idVisiteur ='$idVisiteur' 
-		and mois = '$mois' ";
-        $res = PdoGsb::$monPdo->query($req);
-        $lesLignes = $res->fetchAll();
-        $nbLignes = count($lesLignes);
-        for ($i = 0; $i < $nbLignes; $i++) {
-            $date = $lesLignes[$i]['date'];
-            $lesLignes[$i]['date'] = dateAnglaisVersFrancais($date);
-        }
-        return $lesLignes;
-    }
+//    public function getLesFraisHorsForfait($idVisiteur, $mois) {
+//        $req = "select id, idVisiteur, mois, libelle, datehf as date,montant  ";
+//        $req .= " from " . PdoGsb::$prefixe . "LigneFraisHorsForfait where idVisiteur ='$idVisiteur' 
+//		and mois = '$mois' ";
+//        $res = PdoGsb::$monPdo->query($req);
+//        $lesLignes = $res->fetchAll();
+//        $nbLignes = count($lesLignes);
+//        for ($i = 0; $i < $nbLignes; $i++) {
+//            $date = $lesLignes[$i]['date'];
+//            $lesLignes[$i]['date'] = dateAnglaisVersFrancais($date);
+//        }
+//        return $lesLignes;
+//    }
 
     /**
      * Retourne le nombre de justificatif d'un visiteur pour un mois donné
@@ -99,12 +99,12 @@ class PdoGsb {
      * @param $mois sous la forme aaaamm
      * @return le nombre entier de justificatifs 
      */
-    public function getNbjustificatifs($idVisiteur, $mois) {
-        $req = "select nbJustificatifs as nb from  " . PdoGsb::$prefixe . "FicheFrais where idVisiteur ='$idVisiteur' and mois = '$mois'";
-        $res = PdoGsb::$monPdo->query($req);
-        $laLigne = $res->fetch();
-        return $laLigne['nb'];
-    }
+//    public function getNbjustificatifs($idVisiteur, $mois) {
+//        $req = "select nbJustificatifs as nb from  " . PdoGsb::$prefixe . "FicheFrais where idVisiteur ='$idVisiteur' and mois = '$mois'";
+//        $res = PdoGsb::$monPdo->query($req);
+//        $laLigne = $res->fetch();
+//        return $laLigne['nb'];
+//    }
 
     /**
      * Retourne sous forme d'un tableau associatif toutes les lignes de frais au forfait
@@ -114,28 +114,28 @@ class PdoGsb {
      * @param $mois sous la forme aaaamm
      * @return l'id, le libelle et la quantité sous la forme d'un tableau associatif 
      */
-    public function getLesFraisForfait($idVisiteur, $mois) {
-        $req = "select FF.id as idfrais, FF.libelle as libelle, 
-		LFF.quantite as quantite from " . PdoGsb::$prefixe . "LigneFraisForfait LFF inner join " . PdoGsb::$prefixe . "FraisForfait FF
-		on FF.id = LFF.idFraisForfait
-		where LFF.idVisiteur ='$idVisiteur' and LFF.mois='$mois' 
-		order by LFF.idFraisForfait";
-        $res = PdoGsb::$monPdo->query($req);
-        $lesLignes = $res->fetchAll();
-        return $lesLignes;
-    }
+//    public function getLesFraisForfait($idVisiteur, $mois) {
+//        $req = "select FF.id as idfrais, FF.libelle as libelle, 
+//		LFF.quantite as quantite from " . PdoGsb::$prefixe . "LigneFraisForfait LFF inner join " . PdoGsb::$prefixe . "FraisForfait FF
+//		on FF.id = LFF.idFraisForfait
+//		where LFF.idVisiteur ='$idVisiteur' and LFF.mois='$mois' 
+//		order by LFF.idFraisForfait";
+//        $res = PdoGsb::$monPdo->query($req);
+//        $lesLignes = $res->fetchAll();
+//        return $lesLignes;
+//    }
 
     /**
      * Retourne tous les id de la table FraisForfait
 
      * @return un tableau associatif 
      */
-    public function getLesIdFrais() {
-        $req = "select id as idfrais from " . PdoGsb::$prefixe . "FraisForfait order by id";
-        $res = PdoGsb::$monPdo->query($req);
-        $lesLignes = $res->fetchAll();
-        return $lesLignes;
-    }
+//    public function getLesIdFrais() {
+//        $req = "select id as idfrais from " . PdoGsb::$prefixe . "FraisForfait order by id";
+//        $res = PdoGsb::$monPdo->query($req);
+//        $lesLignes = $res->fetchAll();
+//        return $lesLignes;
+//    }
 
     /**
      * Met à jour la table LigneFraisForfait

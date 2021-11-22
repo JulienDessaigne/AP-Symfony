@@ -14,17 +14,31 @@
                             <select id="lstMois" name="lstMois">
                                 {% for unMois in lesmois %}
                                     {% set mois = unMois.mois %}
+                                    {% set numAnnee = unMois.numAnnee %}
+                                    {% set numMois = unMois.numMois %}
+                                    
+                                    {% if mois == lemois %}
+                                        <option selected value="{{ mois }}">{{ numMois ~"/"}}{{ numAnnee }}</option>
+                                    {% else %}
+                                        <option value="{{ mois }}">{{ numMois ~"/"}}{{ numAnnee }}</option>
+                                    {% endif %}
 
 
-                                    <option selected value="{{ mois }}">{{ unMois.numMois ~"/"}}{{ unMois.numAnnee }}</option>
+                                    
                                 {% endfor %}
                             </select>
                         {% else %}
                         <h1> {{ 'Aucune fiche saisie pour ce visiteur' }} </h1>
-                        {% endif %} 
+                    {% endif %} 
                     </p>
                 </div>
+                <div class="piedForm">
+                    <p>
+                        <input id="ok" type="submit" value="Valider" size="20" />
+                        <input id="annuler" type="reset" value="Effacer" size="20" />
+                    </p> 
+                </div>
             </form>
-        </div>
+        
     {% endblock %}
 {% endblock %}

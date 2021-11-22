@@ -9,15 +9,21 @@ require_once("include/class.pdogsb.inc.php");
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use PdoGsb;
 
 class ListeFraisController extends AbstractController {
 
     public function index(Request $request) {
         $session = $request->getSession();
         $idVisiteur = $session->get('id');
-        $pdo = PdoGsb::getPdoGsb();
-        $lesMois = $pdo->getLesMoisDisponibles($idVisiteur);
+        dump($idVisiteur);
+        $repositoryFicheFrais = $this->getDoctrine()->getRepository(\App\Entity\FicheFrais::class);
+        //$repositoryEtat = $this->getDoctrine()->getRepository(\App\Entity\Etat::class);
+        //$repositoryFraisForfait = $this->getDoctrine()->getRepository(\App\Entity\FraisForfait::class);
+        $repositoryLigneFraisForfait = $this->getDoctrine()->getRepository(\App\Entity\LigneFraisForfait::class);
+        $repositoryligneFraisHorsForfait = $this->getDoctrine()->getRepository(\App\Entity\LigneFraisHorsForfait::class);
+        //$repositoryVisiteur = $this->getDoctrine()->getRepository(\App\Entity\Visiteur::class);
+
+        $lesMois = $repositoryFicheFrais->getLesMoisDispo($idVisiteur);
         if ($lesMois != null) {// s'il y a au moins une fiche de frais pour ce visiteur
             if ($request->getMethod() == 'GET') {
                 $lesCles = array_keys($lesMois);
@@ -25,11 +31,39 @@ class ListeFraisController extends AbstractController {
                 return $this->render('ListeFrais/listemois.html.twig',
                                 array('lesmois' => $lesMois, 'lemois' => $moisASelectionner));
             } else {
-                // suite du traitement non recopié ici on le rajoutera en fin de TP
+                $leMois = $request->request->get('lstMois');
                 
+                $lesMois = $repositoryFicheFrais->getLesMoisDispo($idVisiteur);
+                $moisASelectionner = $leMois;
+                
+                $lesFraisHorsForfait = $repositoryligneFraisHorsForfait->getLesFraisHorsForfait($idVisiteur, $leMois);
+                $lesFraisForfait = $repositoryLigneFraisForfait->getLesFraisForfait($idVisiteur, $leMois);
+
+                $lesInfosFicheFrais = $repositoryFicheFrais->getLesInfosFicheFrais($idVisiteur, $leMois);
+                dump($lesInfosFicheFrais);
+                $numAnnee = substr($leMois, 0, 4);
+                $numMois = substr($leMois, 4, 2);
+                $libEtat = $lesInfosFicheFrais['libEtat'];
+                $montantValide = $lesInfosFicheFrais['montantValide'];
+                $nbJustificatifs = $lesInfosFicheFrais['nbJustificatifs'];
+
+                $dateModif = dateAnglaisVersFrancais($lesInfosFicheFrais['dateModif']);
+
+                return $this->render('ListeFrais/listetouslesfrais.html.twig',
+                                array('numannee' => $numAnnee,
+                                    'nummois' => $numMois,
+                                    'lesfraishorsforfait' => $lesFraisHorsForfait,
+                                    'lesfraisforfait' => $lesFraisForfait,
+                                    'libetat' => $libEtat,
+                                    'montantvalide' => $montantValide,
+                                    'nbjustificatifs' => $nbJustificatifs,
+                                    'datemodif' => $dateModif,
+                                    'lesmois' => $lesMois,
+                                    'lemois' => $moisASelectionner));
             }
-        } else { // il n’y a pas de mois
-            return $this->render('ListeFrais/listemois.html.twig');
+        } else {
+            return $this->render('ListeFrais/listemois.html.twig',
+                            array('lesmois' => $lesMois));
         }
     }
 
