@@ -18,7 +18,13 @@ class LigneFraisForfaitRepository extends ServiceEntityRepository {
         parent::__construct($registry, LigneFraisForfait::class);
     }
 
-    public function getLesFraisForfait(int $id, int $mois) {
+    /**
+     * Retourne les frais forfait d'une fiche frais d'un visiteur
+     * @param int $id
+     * @param int $mois
+     * @return array|null
+     */
+    public function getLesFraisForfait(int $id, int $mois):?array {
         $conn = $this->getEntityManager()->getConnection();
         $sql = "select FF.ini_libelle as idfrais, FF.libelle as libelle, 
 		LFF.quantite as quantite from ligne_frais_forfait LFF inner join frais_forfait FF
@@ -31,17 +37,29 @@ class LigneFraisForfaitRepository extends ServiceEntityRepository {
         return $lesLignes;
     }
 
+    /**
+     * Met à jour les frais forfait d'une fiche frais d'un visiteur
+     * @param int $id
+     * @param string $mois
+     * @param array $lesFrais
+     */
     public function majFraisForfait(int $id, string $mois, array $lesFrais) {
         $conn = $this->getEntityManager()->getConnection();
-
         $lesCles = array_keys($lesFrais);
+        dump($lesCles);
         foreach ($lesCles as $unIdFrais) {
             $qte = $lesFrais[$unIdFrais];
+            dump($qte);
             $sql = "update ligne_frais_forfait set quantite = :qte
-			where idVisiteur = :id and mois = :mois
-			and idFraisForfait = :unIdFrais";
+			where id_visiteur_id = :id and mois = :mois
+			and id_frais_forfait_id = (select id from frais_forfait where ini_libelle=:unIdFrais)";
             $stmt = $conn->prepare($sql);
-            $stmt->executeQuery(['id' => $id, 'mois' => $mois, 'qte'=>$qte, "unIdFrais" => $unIdFrais]);
+            dump($id);
+            dump($mois);
+            dump($qte);
+            dump($unIdFrais);
+
+            $stmt->executeQuery(['id' => $id, 'mois' => $mois, 'qte' => $qte, "unIdFrais" => $unIdFrais]);
         }
     }
 

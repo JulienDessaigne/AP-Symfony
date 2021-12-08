@@ -18,13 +18,18 @@ class LigneFraisHorsForfaitRepository extends ServiceEntityRepository {
         parent::__construct($registry, LigneFraisHorsForfait::class);
     }
 
-    public function getLesFraisHorsForfait(int $id, string $mois) {
+    /**
+     * Retourne les frais hors forfait d'une fiche frais d'un visiteur
+     * @param int $id
+     * @param string $mois
+     * @return array|null
+     */
+    public function getLesFraisHorsForfait(int $id, string $mois):?array {
         $conn = $this->getEntityManager()->getConnection();
         $sql = "select id, id_visiteur_id, mois, libelle, datehf as date,montant from ligne_frais_hors_forfait where id_visiteur_id = :id and mois = :mois";
         $stmt = $conn->prepare($sql);
         $resultSet = $stmt->executeQuery(['id' => $id, 'mois' => $mois]);
         $res = $resultSet->fetchAllAssociative();
-        dump($res);
         $nbLignes = count($res);
         for ($i = 0; $i < $nbLignes; $i++) {
             $res[$i]['date'] = dateAnglaisVersFrancais($res[$i]['date']);
@@ -32,23 +37,36 @@ class LigneFraisHorsForfaitRepository extends ServiceEntityRepository {
         return $res;
     }
 
+    /**
+     * Crée un nouveau frais hors forfait d'une fiche frais d'un visiteur
+     * @param int $id
+     * @param string $mois
+     * @param string $libelle
+     * @param string $date
+     * @param int $montant
+     */
     public function creeNouveauFraisHorsForfait(int $id, string $mois, string $libelle, string $date, int $montant) {
         $conn = $this->getEntityManager()->getConnection();
 
         $dateFr = dateFrancaisVersAnglais($date);
-        $sql = "insert into ligne_frais_hors_forfait (idVisiteur, mois, libelle,datehf,montant)
+        $sql = "insert into ligne_frais_hors_forfait (id_visiteur_id, mois, libelle,datehf,montant)
 		values(:id,:mois,:libelle,:date,:montant)";
         $stmt = $conn->prepare($sql);
         $stmt->executeQuery(['id' => $id, 'mois' => $mois, 'libelle' => $libelle, 'date' => $dateFr, "montant" => $montant]);
     }
-
+    
+    /**
+     * Supprime un frais forfait d'une fiche frais d'un visiteur
+     * @param int $id
+     */
     public function supprimerFraisHorsForfait(int $id) {
-                $conn = $this->getEntityManager()->getConnection();
+        $conn = $this->getEntityManager()->getConnection();
 
         $sql = "delete from ligne_frais_hors_forfait where id =:id ";
         $stmt = $conn->prepare($sql);
         $stmt->executeQuery(['id' => $id]);
     }
+
     // /**
     //  * @return LigneFraisHorsForfait[] Returns an array of LigneFraisHorsForfait objects
     //  */

@@ -13,3 +13,23 @@ app_frais_deconnexion:
 app_frais_listefrais:
     path: /listefrais
     controller: App\Controller\ListeFraisController::index
+    
+app_frais_saisiefrais:
+    path: /saisiefrais
+    controller: App\Controller\SaisieFraisController::saisir_frais
+
+app_frais_saisie_frais_validerMaj:
+    path: /saisiefrais/maj
+    controller: App\Controller\SaisieFraisController::valider_maj_frais_forfait
+    
+app_frais_saisie_frais_validerCreation:
+    path: /saisiefrais/creaction
+    controller: App\Controller\SaisieFraisController::valider_creation_frais
+    
+app_frais_saisie_frais_supprimer:
+    path: /saisiefrais/supprimer
+    controller: App\Controller\SaisieFraisController::supprimer_frais
+    
+app_frais_changer_etat:
+    path: /saisiefrais/etat
+    controller: App\Controller\SaisieFraisController::changer_etat_fiche_frais

@@ -6,48 +6,67 @@
         <th class="date">Date</th>
         <th class="libelle">Libellé</th>  
         <th class="montant">Montant</th>  
-        <th class="action">&nbsp;</th>              
+            {% if etat=='CR' %}  
+            <th class="action">&nbsp;</th>   
+            {% endif %}
     </tr>
 
-   	
-    <tr>
-        <td> </td>
-        <td></td>
-        <td></td>
-        <td><a href="" 
-               onclick="return confirm('Voulez-vous vraiment supprimer ce frais?');">Supprimer ce frais</a></td>
-    </tr>
-     
+    {% for unFraisHorsForfait in lesfraishorsforfait %}
+        {% set id=unFraisHorsForfait.id %}
+        <tr>
+            <td>{{ unFraisHorsForfait.date }}</td>
+            <td>{{ unFraisHorsForfait.libelle }}</td>
+            <td>{{ unFraisHorsForfait.montant }}</td>
+            {% if etat=='CR' %} 
+                <td>
+                    <a href="{{ path('app_frais_saisie_frais_supprimer',{'id':id}) }}" onclick="return confirm('Voulez-vous vraiment supprimer ce frais?');">Supprimer ce frais</a>
+                </td>
+            {% endif %}
+        </tr>
+    {% endfor %}
 
 </table>
-<form action="">
-    <div class="corpsForm">
+<form method="POST" action="{{path('app_frais_saisie_frais_validerCreation')}}">
+    {% if etat=='CR' %}
+        <div class="corpsForm">
 
-        <fieldset>
-            <legend>Nouvel élément hors forfait
-            </legend>
-            <p>
-                <label for="txtDateHF">Date (jj/mm/aaaa): </label>
-                <input type="text" id="txtDateHF" name="dateFrais" size="10" maxlength="10" value=""  />
-            </p>
-            <p>
-                <label for="txtLibelleHF">Libellé</label>
-                <input type="text" id="txtLibelleHF" name="libelle" size="70" maxlength="256" value="" />
-            </p>
-            <p>
-                <label for="txtMontantHF">Montant : </label>
-                <input type="text" id="txtMontantHF" name="montant" size="10" maxlength="10" value="" />
-            </p>
-        </fieldset>
-    </div>
-    <div class="piedForm">
-        <p>
-            <input id="ajouter" type="submit" value="Ajouter" size="20" />
-            <input id="effacer" type="reset" value="Effacer" size="20" />
-        </p> 
-    </div>
+            <fieldset>
+                <legend>Nouvel élément hors forfait
+                </legend>
+                <p>
+                    <label for="txtDateHF">Date (jj/mm/aaaa): </label>
+                    <input type="text" id="txtDateHF" name="dateFrais" size="10" maxlength="10" value=""  />
+                </p>
+                <p>
+                    <label for="txtLibelleHF">Libellé</label>
+                    <input type="text" id="txtLibelleHF" name="libelle" size="70" maxlength="256" value=""  />
+                </p>
+                <p>
+                    <label for="txtMontantHF">Montant : </label>
+                    <input type="text" id="txtMontantHF" name="montant" size="10" maxlength="10" value=""  />
+                </p>
+            </fieldset>
+        </div>
 
+        <div class="piedForm">
+            <p>
+                <input id="ajouter" type="submit" value="Ajouter" size="20" />
+                <input id="effacer" type="reset" value="Effacer" size="20" />
+            </p> 
+        </div>
+    {% endif %}
 </form>
+{% if etat=='CR' %}
+    <h3>
+        <a href="{{ path('app_frais_changer_etat') }}" 
+           onclick="return confirm('Voulez-vous vraiment cloturer la fiche de frais ?');">Cloturer la fiche de frais</a>
+    </h3>
+{% elseif etat=='CL' %}
+    <h3>
+        <a href="{{ path('app_frais_changer_etat') }}" 
+           onclick="return confirm('Voulez-vous vraiment modifier la fiche de frais ?');">Modifier la fiche de frais</a>
+    </h3>
+{% endif %}
 </div>
 
 

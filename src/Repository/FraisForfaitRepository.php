@@ -20,17 +20,14 @@ class FraisForfaitRepository extends ServiceEntityRepository {
 
     
 
-    public function getLesIdFrais() {
-        $conn = $this->getEntityManager()->getConnection();
-        $sql = "select ini_libelle as idfrais from frais_forfait order by ini_libelle";
-        $stmt = $conn->prepare($sql);
-        $resultSet = $stmt->executeQuery();
-        $lesLignes = $resultSet->fetchAllAssociative();
-        return $lesLignes;
-    }
     
     
-    public function getIdByIni(sintrg $etat){
+    /**
+     * Retourne l'id d'un frais forfait en fonction de son état
+     * @param string $etat
+     * @return string|null
+     */
+    public function getIdByIni(string $etat):?string{
         $conn = $this->getEntityManager()->getConnection();
         $sql = "select id from frais_forfait where ini_lib=:etat ";
         $stmt = $conn->prepare($sql);
